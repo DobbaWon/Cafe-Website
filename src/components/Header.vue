@@ -1,8 +1,23 @@
 <script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+
+const isScrolled = ref(false)
+
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > 50 // adjust threshold as needed
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <template>
-  <div class="header">
+  <div :class="['header', { scrolled: isScrolled }]">
     <h1>Cafe Name</h1>
 
     <div class="header-spacer">
@@ -21,15 +36,18 @@
   width: 100%;
   align-items: center;
   justify-content: space-between;
-  background-color: rgba(42,42,42,1);
-  transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+  background-color: rgba(42, 42, 42, 1);
+  transition: background-color 0.3s ease, backdrop-filter 0.3s ease, opacity 0.3s ease;
   height: 12vh;
   padding: 0 2rem;
+  opacity: 0.6;
 }
 
+/* When user scrolls down */
 .header.scrolled {
-  background-color: rgba(42, 42, 42, 0.8); 
+  background-color: rgba(42, 42, 42, 0.8);
   backdrop-filter: blur(6px);
+  opacity: 0.8; /* reduce opacity */
 }
 
 .header h1 {
